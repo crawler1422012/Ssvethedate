@@ -1,0 +1,115 @@
+:root {
+  --base: #ffffff;
+  --base-dark: #f2f2f2;
+  --shadow: #d6d6d6;
+  --paper: #fffaf4;
+}
+
+/* Layout */
+body {
+  margin: 0;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f4f2f7;
+  font-family: sans-serif;
+}
+.container {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+.content {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+/* Envelope Shape */
+.envelope {
+  position: relative;
+  width: 300px;
+  height: 180px;
+  background:
+    linear-gradient(30deg, var(--base-dark) 47%, var(--shadow) 50%, var(--base) 50%)
+      150px 90px / 150px 90px no-repeat,
+    linear-gradient(31deg, var(--base) 49%, var(--shadow) 50%, transparent 50%)
+      0px 0px / 152px 90px no-repeat,
+    linear-gradient(150deg, var(--base) 50%, var(--shadow) 50%, var(--base-dark) 53%)
+      0px 90px / 151px 90px no-repeat,
+    linear-gradient(148.7deg, transparent 50%, var(--shadow) 50%, var(--base) 51%)
+      150px 0px / 150px 90px no-repeat;
+  background-color: var(--base);
+  border: 1px solid var(--shadow);
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 25;
+  transform-style: preserve-3d;
+}
+
+/* Flap (animated with GSAP) */
+.envelope::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  height: 60%;
+  background: #fff;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border: 1px solid var(--shadow);
+  border-bottom: none;
+  transform-origin: top center;
+  backface-visibility: hidden;
+  z-index: 30;
+}
+
+/* Letter Card */
+.letter {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 260px;
+  height: 170px;
+  z-index: 20;
+}
+.letter .body {
+  position: absolute;
+  inset: 0;
+  background: var(--paper);
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #00000010;
+  color: #333;
+  font-weight: 700;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Shadow under the letter */
+.shadow {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -12px;
+  height: 14px;
+  width: 40px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 999px;
+  box-shadow: 0 40px 12px 8px #eeeef3;
+  z-index: 0;
+}

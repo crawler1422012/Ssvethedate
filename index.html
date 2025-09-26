@@ -1,8 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Minimal Envelope Invitation</title>
   <style>
     body {
@@ -17,14 +17,15 @@
 
     .envelope {
       position: relative;
-      width: 300px;
-      height: 200px;
+      width: 280px;
+      height: 180px;
       background: #fff;
       border: 2px solid #ddd;
       border-radius: 6px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       cursor: pointer;
       overflow: hidden;
+      perspective: 1200px;
     }
 
     /* Flap */
@@ -45,17 +46,14 @@
     /* Card */
     .card {
       position: absolute;
-      top: 20%;
+      top: 15%;
       left: 8%;
       width: 84%;
       height: 70%;
-      background: #fff;
-      border-radius: 6px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-      transform: translateY(40%) scale(2.9);
+      transform: translateY(40%) scale(0.9);
       opacity: 0;
       transition: transform 1s ease, opacity 0.6s ease;
-      z-index: 3;
+      z-index: 1;
     }
 
     .card img {
@@ -63,16 +61,17 @@
       height: 100%;
       object-fit: cover;
       border-radius: 6px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     }
 
     /* Open state */
     .open .flap {
       transform: rotateX(-180deg);
     }
-
     .open .card {
-      transform: translateY(-120%) scale(1.1);
+      transform: translateY(-110%) scale(1.15);
       opacity: 1;
+      z-index: 3;
     }
   </style>
 </head>
@@ -80,16 +79,16 @@
   <div class="envelope" id="envelope">
     <div class="flap"></div>
     <div class="card">
-      <!-- Replace with your GitHub raw image URL -->
-      <img src="https://raw.githubusercontent.com/crawler1422012/Ssvethedate/3e9d8e88ba729473cdde6c0723c904808b2e511b/file_0000000072f0620aa73a466c028b2b73.png" 
+      <!-- Replace with your GitHub raw link -->
+      <img src="https://raw.githubusercontent.com/crawler1422012/Ssvethedate/3e9d8e88ba729473cdde6c0723c904808b2e511b/file_0000000072f0620aa73a466c028b2b73.png"
            alt="Invitation Card">
     </div>
   </div>
 
   <script>
-    const env = document.getElementById('envelope');
-    env.addEventListener('click', () => {
-      env.classList.toggle('open');
+    const env = document.getElementById("envelope");
+    env.addEventListener("click", () => {
+      env.classList.toggle("open");
     });
   </script>
 </body>

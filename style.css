@@ -3,51 +3,50 @@
   --base-dark: #f2f2f2;
   --shadow: #d6d6d6;
   --paper: #fffaf4;
+  --bg: #f4f2f7;
 }
 
 /* Layout */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
   margin: 0;
-  height: 100vh;
   display: grid;
   place-items: center;
-  background: #f4f2f7;
-  font-family: sans-serif;
+  background: var(--bg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
-.container {
-  display: grid;
-  place-items: center;
-  width: 100%;
-}
-.content {
-  position: relative;
-  transform-style: preserve-3d;
-}
+.container { display: grid; place-items: center; width: 100%; }
+.content { position: relative; transform-style: preserve-3d; }
 
-/* Envelope Shape */
+/* Envelope (CSS gradient folds) */
 .envelope {
   position: relative;
   width: 300px;
   height: 180px;
+  cursor: pointer;
+  z-index: 25;
+  transform-style: preserve-3d;
   background:
+    /* bottom-right fold */
     linear-gradient(30deg, var(--base-dark) 47%, var(--shadow) 50%, var(--base) 50%)
       150px 90px / 150px 90px no-repeat,
+    /* top-left fold */
     linear-gradient(31deg, var(--base) 49%, var(--shadow) 50%, transparent 50%)
       0px 0px / 152px 90px no-repeat,
+    /* bottom-left fold */
     linear-gradient(150deg, var(--base) 50%, var(--shadow) 50%, var(--base-dark) 53%)
       0px 90px / 151px 90px no-repeat,
+    /* top-right fold */
     linear-gradient(148.7deg, transparent 50%, var(--shadow) 50%, var(--base) 51%)
       150px 0px / 150px 90px no-repeat;
   background-color: var(--base);
   border: 1px solid var(--shadow);
   border-radius: 6px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  cursor: pointer;
-  z-index: 25;
-  transform-style: preserve-3d;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
 }
 
-/* Flap (animated with GSAP) */
+/* Triangular flap (animated via GSAP with CSSRulePlugin) */
 .envelope::before {
   content: "";
   position: absolute;
@@ -61,29 +60,41 @@ body {
   border-bottom: none;
   transform-origin: top center;
   backface-visibility: hidden;
-  z-index: 30;
+  z-index: 30; /* above envelope, below letter when opened */
 }
 
-/* Letter Card */
+/* Letter / Invitation Card (portrait) */
 .letter {
   position: absolute;
   top: 0;
   left: 50%;
   transform: translate(-50%, 0);
-  width: 260px;
-  height: 170px;
+  width: 220px;   /* portrait frame (keeps 2:3-ish ratio) */
+  height: 330px;  /* taller than envelope */
   z-index: 20;
 }
+
 .letter .body {
   position: absolute;
   inset: 0;
   background: var(--paper);
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 10px 24px rgba(0,0,0,0.18);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* keep image within rounded corners */
 }
+
+/* The invitation image inside the card */
+.letter .body img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fill without distortion */
+  border-radius: 12px;
+}
+
+/* Close (×) button overlay */
 .close {
   position: absolute;
   top: 6px;
@@ -98,18 +109,26 @@ body {
   text-align: center;
   cursor: pointer;
   user-select: none;
+  z-index: 5;
 }
 
-/* Shadow under the letter */
+/* Soft shadow under the letter; GSAP widens it while the card emerges */
 .shadow {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   bottom: -12px;
   height: 14px;
-  width: 40px;
+  width: 40px; /* GSAP animates width to ~120px */
   background: rgba(0, 0, 0, 0.05);
   border-radius: 999px;
   box-shadow: 0 40px 12px 8px #eeeef3;
   z-index: 0;
+}
+
+/* Optional: Larger sizes on wider screens */
+@media (min-width: 520px) {
+  .envelope { width: 360px; height: 216px; }
+  .letter   { width: 260px; height: 390px; }
+  .letter .body, .letter .body img { border-radius: 14px; }
 }

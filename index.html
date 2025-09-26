@@ -3,25 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CSS Envelope Invitation</title>
+  <title>Envelope Invitation</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Envelope -->
-  <div class="envelope" id="envelope">
-    <!-- Invitation Card -->
-    <div class="card">
-      <!-- Replace with your GitHub raw image link -->
-      <img src="https://raw.githubusercontent.com/crawler1422012/Ssvethedate/3e9d8e88ba729473cdde6c0723c904808b2e511b/file_0000000072f0620aa73a466c028b2b73.png"
-           alt="Invitation Card">
+  <div class="container">
+    <div class="content">
+      <!-- Envelope -->
+      <div class="envelope" onclick="openCard()"></div>
+
+      <!-- Letter / Invitation Card -->
+      <div class="letter">
+        <div class="body">
+          <span class="close" onclick="event.stopPropagation(); closeCard()">×</span>
+          <div class="message">
+            <!-- Replace src with your GitHub raw image URL if needed -->
+            <img src="https://raw.githubusercontent.com/crawler1422012/Ssvethedate/3e9d8e88ba729473cdde6c0723c904808b2e511b/file_0000000072f0620aa73a466c028b2b73.png"
+                 alt="Invitation Card" style="width:100%; border-radius:8px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Shadow -->
+      <div class="shadow"></div>
     </div>
   </div>
 
-  <script>
-    const env = document.getElementById("envelope");
-    env.addEventListener("click", () => {
-      env.classList.toggle("open");
-    });
-  </script>
+  <!-- GSAP libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CSSRulePlugin.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

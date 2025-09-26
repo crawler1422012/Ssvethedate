@@ -1,35 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Envelope Invitation</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="container">
-    <div class="content">
-      <!-- Envelope (click to open) -->
-      <div class="envelope" onclick="openCard()" aria-label="Open invitation" role="button" tabindex="0"></div>
-
-      <!-- Letter / Invitation Card (portrait) -->
-      <div class="letter" aria-hidden="true">
-        <div class="body">
-          <span class="close" onclick="event.stopPropagation(); closeCard()" title="Close">×</span>
-          <img
-            src="https://raw.githubusercontent.com/crawler1422012/Ssvethedate/3e9d8e88ba729473cdde6c0723c904808b2e511b/file_0000000072f0620aa73a466c028b2b73.png"
-            alt="Invitation Card" />
-        </div>
+<div class="container">
+  <div class="content">
+    <div class="envelope" onclick="openCard()"></div>
+    <div class="letter">
+      <div class="body">
+        <span class="close" onclick="event.stopPropagation(); closeCard()">x</span>
+        <div class="message">fin.</div>
       </div>
-
-      <!-- Soft shadow under the card (widened during animation) -->
-      <div class="shadow"></div>
     </div>
+    <div class="shadow"></div>
   </div>
-
-  <!-- GSAP (animation libs) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CSSRulePlugin.min.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+</div> 

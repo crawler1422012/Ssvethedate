@@ -1,55 +1,57 @@
-// Targets (match your HTML/CSS class names)
-const flapRule = CSSRulePlugin.getRule(".envelope:before"); // the triangular flap
+// === Targets (match CSS) ===
+const flapRule = CSSRulePlugin.getRule(".envelope:before"); // the flap
 const envelope = document.querySelector(".envelope");
 const letter   = document.querySelector(".letter");
 const shadow   = document.querySelector(".shadow");
 
-// Timeline (paused; we play or reverse it)
-const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.inOut" } });
+// === Timeline ===
+// Paused by default; we play() to open, reverse() to close
+const tl = gsap.timeline({ paused: true });
 
-// Initial state (in case browser styles differ)
-gsap.set(letter, { y: 0, scale: 1 });
+// Ensure known starting state
+gsap.set(letter, { y: 0, scale: 1, zIndex: 10 });
 gsap.set(shadow, { width: 40, opacity: 0.12 });
 
-// Build the open animation
+// Build animation:
+// 1) flap rotates back
+// 2) card rises higher (portrait), scales slightly, then comes in front
+// 3) shadow widens
 tl
-  // 1) Flap folds back
-  .to(flapRule, { duration: 0.6, cssRule: { rotateX: -180 } }, 0)
-  // 2) Card emerges upward and scales
-  .to(letter,   { duration: 1.0, y: -280, scale: 1.05, ease: "power2.out" }, 0.2)
-  // 3) Shadow widens as card comes forward
+  .to(flapRule, { duration: 0.6, cssRule: { rotateX: -180 }, ease: "power2.inOut" }, 0)
+  .to(letter,   { duration: 1.0, y: -350, scale: 1.05, ease: "power2.out" }, 0.2)
+  .set(letter,  { zIndex: 30, pointerEvents: "auto" }, "<") // once moving, allow clicks and bring to front
   .to(shadow,   { duration: 1.0, width: 120, opacity: 0.2, ease: "power2.out" }, 0.2);
 
-// Public functions (used by onclick in index.html)
-let isAnimating = false;
-
+// Public API for inline handlers
+let busy = false;
 function openCard() {
-  if (isAnimating || tl.progress() > 0 && !tl.reversed()) return;
-  isAnimating = true;
-  tl.play().then(() => { isAnimating = false; });
+  if (busy || (!tl.reversed() && tl.progress() > 0)) return;
+  busy = true;
+  tl.play().then(() => { busy = false; });
 }
 
 function closeCard() {
-  if (isAnimating || tl.progress() === 0 && tl.reversed()) return;
-  isAnimating = true;
-  tl.reverse().then(() => { isAnimating = false; });
+  if (busy || tl.progress() === 0 && tl.reversed()) return;
+  busy = true;
+  // put card behind flap again as it closes
+  tl.eventCallback("onReverseComplete", () => {
+    gsap.set(letter, { zIndex: 10, pointerEvents: "none" });
+    tl.eventCallback("onReverseComplete", null);
+    busy = false;
+  });
+  tl.reverse();
 }
 
-// Optional: also wire up click handlers here (in case you remove inline onclick)
-if (envelope) {
-  envelope.addEventListener("click", () => openCard());
-}
-
-// Optional: keyboard accessibility (Enter/Space toggles)
+// Optional: keyboard toggle (Enter/Space)
 document.addEventListener("keydown", (e) => {
-  const key = e.key.toLowerCase();
-  if (key === "enter" || key === " ") {
+  const k = e.key.toLowerCase();
+  if (k === "enter" || k === " ") {
     e.preventDefault();
-    if (tl.reversed() || tl.progress() === 0) openCard();
+    if (tl.progress() === 0 || tl.reversed()) openCard();
     else closeCard();
   }
 });
 
-// Expose to window if you keep inline HTML handlers
+// Expose functions if you keep inline handlers in HTML
 window.openCard = openCard;
 window.closeCard = closeCard;

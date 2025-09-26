@@ -1,132 +1,64 @@
-:root{
-  --base:#ffffff;
-  --base-light:#f6f5fb;   /* subtle stripe bg */
-  --base-dark:#f2f2f6;
-  --shadow:#d6d6e2;
-  --paper:#fffaf4;
-  --bg:#f4f2f7;
-  --flap:#7873a7;         /* flap color */
+  @include center-by-all-means;
+  z-index: 15;
+  border-radius: 2px;
+  background: var(--letter);
+  box-shadow: 0px 1px 7px -2px var(--base);
+
+  .body {
+    position: relative;
+    width: 240px;
+    height: 120px;
+    @include center-by-all-means;
+    color: var(--base);
+
+    .close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      font-size: 30px;
+      font-family: "Manjari", sans-serif;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    .message {
+      font-size: 40px;
+      font-weight: 900;
+      text-align: center;
+      font-family: "Great Vibes", cursive;
+    }
+  }
 }
 
-/* Base layout */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  display:grid;
-  place-items:center;
-  background:var(--bg);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-}
-.container{display:grid;place-items:center;width:100%;padding:24px}
-.content{position:relative;transform-style:preserve-3d}
-
-/* Envelope shell with subtle paper stripes */
-.envelope{
-  position:relative;
-  width:300px;
-  height:180px;
-  cursor:pointer;
-  background:linear-gradient(#cccbd7 .5px, var(--base-light) .5px);
-  background-size:100% 12px;
-  border-radius:6px;
-  box-shadow:0 6px 20px rgba(0,0,0,.10);
-  border:1px solid var(--shadow);
-  overflow:hidden;                 /* hide inner seams */
-  z-index:10;
-  transform-style:preserve-3d;
+.envelope {
+  position: relative;
+  width: 300px;
+  height: 180px;
+  background: linear-gradient(#cccbd7 0.5px, var(--base-light) 0.5px);
+  cursor: pointer;
 }
 
-/* Flap (triangle) — animated via GSAP rotateX on ::before */
-.envelope::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:0;
-  transform:translateX(-50%);
-  width:0;height:0;
-  border-left:150px solid transparent;
-  border-right:150px solid transparent;
-  border-top:115px solid var(--flap);
-  filter:drop-shadow(0 1px 0 rgba(0,0,0,.05));
-  transform-origin:top center;
-  z-index:30; /* topmost at rest */
+.envelope::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  border-top: 115px solid #7873a7;
+  border-left: 150px solid transparent;
+  border-right: 150px solid transparent;
+  box-sizing: border-box;
+  z-index: 30;
+  transform-origin: top;
 }
 
-/* Front mask (bottom panel & folds) */
-.envelope::after{
-  content:"";
-  position:absolute;
-  top:0;left:0;
-  width:300px;height:180px;
-  z-index:25; /* below flap, above card */
-  background:
-    /* bottom-right */
-    linear-gradient(30deg, var(--base-dark) 47%, var(--shadow) 50%, var(--base) 50%) 150px 90px/150px 90px no-repeat,
-    /* top-left */
-    linear-gradient(31deg, var(--base) 49%, var(--shadow) 50%, transparent 50%) 0 0/152px 90px no-repeat,
-    /* bottom-left */
-    linear-gradient(150deg, var(--base) 50%, var(--shadow) 50%, var(--base-dark) 53%) 0 90px/151px 90px no-repeat,
-    /* top-right */
-    linear-gradient(148.7deg, transparent 50%, var(--shadow) 50%, var(--base) 51%) 150px 0/150px 90px no-repeat,
-    /* base fill to hide seams */
-    linear-gradient(var(--base), var(--base));
-  border-bottom-left-radius:6px;
-  border-bottom-right-radius:6px;
-  box-shadow:inset 0 1px 0 rgba(0,0,0,.03);
-}
-
-/* Portrait letter/card (1024x1536 friendly) */
-.letter{
-  position:absolute;
-  top:0;
-  left:50%;
-  transform:translate(-50%,0);
-  width:220px;
-  height:330px;
-  z-index:20;            /* below flap(30) & mask(25) at rest */
-  pointer-events:none;   /* re-enabled when opened */
-}
-.letter .body{
-  position:absolute;inset:0;
-  background:var(--paper);
-  border-radius:12px;
-  box-shadow:0 10px 24px rgba(0,0,0,.18);
-  overflow:hidden;
-}
-.letter .body img{
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
-  border-radius:12px;
-}
-
-/* Close button */
-.close{
-  position:absolute;top:6px;right:10px;
-  width:28px;height:28px;
-  border-radius:999px;
-  background:#00000010;color:#333;
-  font-weight:700;line-height:28px;text-align:center;
-  cursor:pointer;user-select:none;
-  z-index:5;
-}
-
-/* Shadow beneath card (animated wider) */
-.shadow{
-  position:absolute;
-  left:50%;transform:translateX(-50%);
-  bottom:-12px;
-  height:14px;width:40px;  /* GSAP animates to ~120px */
-  background:rgba(0,0,0,.05);
-  border-radius:999px;
-  box-shadow:0 40px 12px 8px #eeeef3;
-  z-index:5;
-}
-
-/* Larger on wider screens */
-@media (min-width:520px){
-  .envelope{width:360px;height:216px}
-  .letter{width:260px;height:390px}
-  .letter .body,.letter .body img{border-radius:14px}
-}
+.envelope::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 300px;
+  height: 180px;
+  z-index: 25;

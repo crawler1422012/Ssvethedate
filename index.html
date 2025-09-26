@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Save the Date — Envelope Animation with Image Card</title>
+  <title>Invitation — Envelope Animation</title>
   <style>
     body {
       margin: 0;
@@ -11,8 +11,8 @@
       place-items: center;
       height: 100vh;
       background: #f6f3ec;
-      font-family: Georgia, serif;
       overflow: hidden;
+      font-family: sans-serif;
     }
     .stage {
       position: relative;
@@ -84,7 +84,6 @@
       opacity: 1;
     }
 
-    /* Confetti */
     .confetti {
       position: fixed;
       top: 0;
@@ -118,8 +117,8 @@
       <div class="back"></div>
       <div class="flap"></div>
       <div class="card">
-        <!-- Replace the src below with your invitation card image -->
-        <img src="https://via.placeholder.com/600x800.png?text=Your+Invitation+Card" alt="Invitation Card">
+        <img src="https://raw.githubusercontent.com/crawler1422012/Ssvethedate/3e9d8e88ba729473cdde6c0723c904808b2e511b/file_0000000072f0620aa73a466c028b2b73.png"
+             alt="Invitation Card">
       </div>
       <div class="front"></div>
     </div>
@@ -149,6 +148,7 @@
         setTimeout(() => piece.remove(), 5000);
       }
     }
+
     function randomColor() {
       const colors = ["#f94144","#f3722c","#f9c74f","#90be6d","#43aa8b","#577590"];
       return colors[Math.floor(Math.random() * colors.length)];

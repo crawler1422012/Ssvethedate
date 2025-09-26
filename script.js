@@ -1,54 +1,36 @@
-// GSAP targets
-const flapRule = CSSRulePlugin.getRule(".envelope:before");
-const envelope = document.querySelector(".envelope");
-const letter   = document.querySelector(".letter");
-const shadow   = document.querySelector(".shadow");
+let t1 = gsap.timeline({ paused: true }); 
+let flap = CSSRulePlugin.getRule(".envelope:before"); 
 
-// Timeline
-const tl = gsap.timeline({ paused: true });
-
-// Start states
-gsap.set(letter, { y: 0, scale: 1, zIndex: 20, pointerEvents: "none" });
-gsap.set(shadow, { width: 40, opacity: 0.12 });
-
-// Build animation
-tl
-  // flap rotates back
-  .to(flapRule, { duration: 0.6, cssRule: { rotateX: -180 }, ease: "power2.inOut" }, 0)
-  // card emerges higher (portrait) and scales slightly
-  .to(letter,   { duration: 1.0, y: -350, scale: 1.05, ease: "power2.out" }, 0.2)
-  // once moving, bring to front & allow clicks
-  .set(letter,  { zIndex: 40, pointerEvents: "auto" }, "<")
-  // shadow widens
-  .to(shadow,   { duration: 1.0, width: 120, opacity: 0.2, ease: "power2.out" }, 0.2);
-
-let busy = false;
-function openCard(){
-  if (busy || (!tl.reversed() && tl.progress() > 0)) return;
-  busy = true;
-  tl.play().then(() => busy = false);
-}
-function closeCard(){
-  if (busy || (tl.progress() === 0 && tl.reversed())) return;
-  busy = true;
-  tl.eventCallback("onReverseComplete", () => {
-    gsap.set(letter, { zIndex: 20, pointerEvents: "none" }); // hide back under flap
-    tl.eventCallback("onReverseComplete", null);
-    busy = false;
-  });
-  tl.reverse();
-}
-
-// Optional keyboard support
-document.addEventListener("keydown", (e) => {
-  const k = e.key.toLowerCase();
-  if (k === "enter" || k === " ") {
-    e.preventDefault();
-    if (tl.progress() === 0 || tl.reversed()) openCard();
-    else closeCard();
+t1.to(flap, { 
+  duration: 0.5, 
+  cssRule: {
+    rotateX: 180
   }
+})
+ .set(flap, {
+  cssRule: {
+    zIndex: 10
+  }
+})
+ .to('.letter', {
+  translateY: -200,
+  duration: 0.9, 
+  ease: "back.inOut(1.5)"
+})
+ .set('.letter', {
+  zIndex: 40
+})
+ .to('.letter', {
+  duration: .7,  
+  ease: "back.out(.4)",
+  translateY: -5,
+  translateZ: 250
 });
 
-// Expose for inline handlers
-window.openCard = openCard;
-window.closeCard = closeCard;
+let t2 = gsap.timeline({ paused: true }); 
+t2.to('.shadow', {
+  delay: 1.4,
+  width: 450,
+  boxShadow: "-75px 150px 10px 5px #eeeef3",
+  ease: "back.out(.2)",
+  duration: .7
